@@ -2,12 +2,13 @@ import './socket.io.js'
 
 class Connect extends EventTarget {
 
-  constructor(address) {
+  constructor(api) {
     super();
 
+    this.api = api;
     this.tracker = 0;
     this.packet = {};
-    this.socket = io(address);
+    this.socket = io();
     this.connected = false;
 
     this.socket.on('connect', async () => {
@@ -33,6 +34,46 @@ class Connect extends EventTarget {
       } 
     })
 
+    this.socket.on('@', async packet => {
+
+      const parts = packet['@'].split('.');
+      const method = parts.pop();
+      let target = this.api;
+      for (let part of parts) {
+        if (!target) { break }
+        target = target[part];
+      }
+      
+      try {
+        
+        if (!target) { throw `unknown library [${parts.join('.')}]` }
+        if (!target[method]) { throw `unknown action [${packet['@']}]` }
+
+        const fn = target[method].bind(target);
+        const data = await fn(packet);
+        if (packet.$id) {
+          const reply = {
+            id: packet.$id,
+            ok: 1,
+            data: data
+          }
+          this.socket.emit('~', reply)
+        }
+
+      } catch (ex) {
+
+        console.error('error:', packet['@'], ex);
+        if (packet.$id) {
+          this.socket.emit('~', { 
+            id: packet.$id, 
+            error: ex.message || ex.toString()
+          });
+        }
+
+      }
+    });
+
+
   }
 
   async send(action, param){
@@ -54,6 +95,6 @@ class Connect extends EventTarget {
 
 }
 
-export const connect = async address => {
-  return new Connect(address);
+export const connect = async (api) => {
+  return new Connect(api);
 }

@@ -6,48 +6,62 @@ Basic application with a server
 
 Server:
 ```
-require('quick-serve').start()
+const { serve } = require('@tagpi/quick-serve');
+(async () => {
+
+  // start the server
+  const server = await serve({ 
+
+    // default http entries
+    http: {
+      port: 8080,
+      path: {
+        '/': './public',
+      },
+      default: '/index.html'
+    },
+
+    // default client api
+    api: {
+      connection: { 
+        connect(socket, param) { 
+          console.log('cn')
+        },
+        disconnect(socket, param) {
+          console.log('dc')
+        }
+      },
+      server: {
+        ping() { 
+          return Date.now();
+        }
+      }
+    }
+
+  });
+})()
 ```
 
 Client:
 ```
 <script>
   import { connect } from './node/quick-serve/connect.js';
-
   (async () => {
-    const client = await connect();
-    console.log(await client.server.ping());
-  })()
-</script>
-```
 
-
-## CONFIG
-
-```
-require('quick-serve').start({
-  http: {
-    enabled: true,
-    port: 8080,
-    path: {
-      '/': './public',
-    },
-    default: '/index.html'
-  },
-  socket: {
-    enabled: true,
-    api: {
-      'my-lib': require('./api/lib.js'),
-      connection: { 
-        connect(socket) { 
-          console.log('cn')
-        },
-        disconnect(socket) {
-          console.log('dc')
+    // server to client commands
+    const serverToClientApi = { 
+      sys: { 
+        log(param) { 
+          console.log('[api.sys]', param.message);
         }
       }
     }
-  }
-})
+
+    // 
+    const client = await connect(serverToClientApi);
+    console.log(await client.server.ping());
+    
+  })()
+</script>
 ```
 
