@@ -1,0 +1,26 @@
+{
+  "name": "quick-serve",
+  "version": "1.0.0",
+  "description": "Basic application with a server",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tagpi/node-quick-serve.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tagpi/node-quick-serve/issues"
+  },
+  "homepage": "https://github.com/tagpi/node-quick-serve#readme",
+  "dependencies": {
+    "colors": "^1.4.0",
+    "express": "^4.17.1",
+    "fs-extra": "^9.1.0",
+    "lodash": "^4.17.21",
+    "socket.io": "^4.0.0"
+  }
+}
