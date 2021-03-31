@@ -4,9 +4,21 @@ Basic application with a server
 
 ## USAGE 
 
+Create github dependency
+```
+"dependencies": {
+  "@tagpi/node-quick-serve": "git://github.com/tagpi/node-quick-serve.git"
+}
+```
+
+```
+npm i
+```
+
+
 Server:
 ```
-const { serve } = require('@tagpi/quick-serve');
+const { serve } = require('@tagpi/node-quick-serve');
 (async () => {
 
   // start the server
@@ -44,24 +56,24 @@ const { serve } = require('@tagpi/quick-serve');
 
 Client:
 ```
-<script>
-  import { connect } from './node/quick-serve/connect.js';
-  (async () => {
-
-    // server to client commands
-    const serverToClientApi = { 
-      sys: { 
-        log(param) { 
-          console.log('[api.sys]', param.message);
+  <script type="module">
+    import { connect } from './node/quick-serve/connect.js';
+    (async () => {
+  
+      // server to client commands
+      const serverToClientApi = { 
+        sys: { 
+          log(param) { 
+            console.log('[api.sys]', param.message);
+          }
         }
       }
-    }
-
-    // 
-    const client = await connect(serverToClientApi);
-    console.log(await client.server.ping());
-    
-  })()
-</script>
+  
+      // 
+      const client = await connect(serverToClientApi);
+      console.log(await client.send('server.ping'));
+      
+    })()
+  </script>
 ```
 
