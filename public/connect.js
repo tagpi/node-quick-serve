@@ -10,6 +10,7 @@ class Connect extends EventTarget {
     this.packet = {};
     this.socket = io();
     this.connected = false;
+    this.dev = true;
 
     this.socket.on('connect', async () => {
       this.connected = true;
@@ -46,8 +47,16 @@ class Connect extends EventTarget {
       
       try {
         
-        if (!target) { throw `unknown library [${parts.join('.')}]` }
-        if (!target[method]) { throw `unknown action [${packet['@']}]` }
+        if (!target) { 
+          if (this.dev) {
+            throw `unknown library [${parts.join('.')}]` 
+          }
+        }
+        if (!target[method]) { 
+          if (this.dev) { 
+            throw `unknown action [${packet['@']}]` 
+          }
+        }
 
         const fn = target[method].bind(target);
         const data = await fn(packet);
@@ -95,6 +104,10 @@ class Connect extends EventTarget {
 
 }
 
-export const connect = async (api) => {
-  return new Connect(api);
+export const connect = async (api, option) => {
+  const cn = new Connect(api);
+  if (option && option.dev) { 
+    cn.dev = true;
+  }
+  return cn;
 }
