@@ -31,10 +31,14 @@ exports.Client = class Client {
 
   createConfig(config) {
 
-    // 
+    // assigned config path
     if (typeof config === 'string') {
+      const assignedPath = this.getServePath(config);
+      if (!fs.existsSync(assignedPath)){
+        throw new Error(`invalid serve config`.red);
+      } 
       config = fs.readFileSync(
-        this.getServePath(config),
+        assignedPath,
         { encoding: 'utf-8' }
       );
       config = JSON.parse(config);
