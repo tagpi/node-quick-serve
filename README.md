@@ -6,8 +6,26 @@ Basic application with a server
 ## NPX
 
 ```
-npx github:tagpi/node-quick-serve start [config]
+npx github:tagpi/node-quick-serve [config]
 ```
+
+example config file [serve.json]:
+```
+{ 
+
+  http: {
+    port: 8080,
+    path: {
+      '/': './public',
+    },
+    default: '/index.html'
+  },
+
+  api: "./api/index.js"
+
+}
+```
+
 
 
 ## Local Setup 
@@ -64,24 +82,24 @@ const { serve } = require('@tagpi/node-quick-serve');
 
 Client:
 ```
-  <script type="module">
-    import { connect } from './node/quick-serve/connect.js';
-    (async () => {
-  
-      // server to client commands
-      const serverToClientApi = { 
-        sys: { 
-          log(param) { 
-            console.log('[api.sys]', param.message);
-          }
+<script type="module">
+  import { connect } from './node/quick-serve/connect.js';
+  (async () => {
+
+    // server to client commands
+    const serverToClientApi = { 
+      sys: { 
+        log(param) { 
+          console.log('[api.sys]', param.message);
         }
       }
-  
-      // 
-      const client = await connect(serverToClientApi);
-      console.log(await client.send('server.ping'));
-      
-    })()
-  </script>
+    }
+
+    // 
+    const client = await connect(serverToClientApi);
+    console.log(await client.send('server.ping'));
+    
+  })()
+</script>
 ```
 
