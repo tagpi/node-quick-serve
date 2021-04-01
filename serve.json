@@ -1,0 +1,10 @@
+{
+  "http": {
+    "port": 8080,
+    "path": {
+      "/": "./public"
+    },
+    "default": "/index.html"
+  },
+  "api": "./api/index.js"
+}

@@ -2,7 +2,15 @@
 
 Basic application with a server
 
-## USAGE 
+
+## NPX
+
+```
+npx github:tagpi/node-quick-serve start [config]
+```
+
+
+## Local Setup 
 
 Create github dependency
 ```
