@@ -44,7 +44,7 @@ exports.Client = class Client {
     if (!config) {
 
       // check for default path
-      const defaultPath = path.join(process.cwd(), './serve.json');
+      const defaultPath = this.getServePath('./serve.json');
       if (fs.existsSync(defaultPath)) {
         config = fs.readFileSync(defaultPath, { encoding: 'utf-8' });
         if (config) {
@@ -54,7 +54,9 @@ exports.Client = class Client {
 
       // use library default
       if (!config) {
-        config = path.join(__dirname, './serve.json');
+        const libPath = path.join(__dirname, './serve.json');
+        config = fs.readFileSync(libPath, { encoding: 'utf-8' });
+        config = JSON.parse(config);
       }
 
     }
@@ -66,11 +68,21 @@ exports.Client = class Client {
 
   createApiMap(api) {
 
-    // default client api
+    // check local api
     if (!api) {
-      api = path.join(__dirname, './api/index.js');
+      const localPath = path.join(process.cwd(), './api/index.js');
+      if (fs.existsSync(localPath)){
+        api = require(localPath);
+      }
     }
 
+    // get library api
+    if (!api) {
+      const libPath = path.join(__dirname, './api/index.js');
+      api = require(libPath);
+    }
+
+    // check client configured api path
     if (typeof api === 'string') {
       api = require(this.getServePath(api));
     }
