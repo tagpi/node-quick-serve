@@ -228,7 +228,6 @@ exports.Client = class Client {
         let fullPath = path.join(source, req.originalUrl.substr(key.length) || '/');
         if (!fs.existsSync(fullPath)) {
           fullPath = defaultFile;
-          console.log('file not found', req.originalUrl, key);
         }
         res.sendFile(fullPath);
       });
