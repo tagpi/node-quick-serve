@@ -18,7 +18,7 @@ example config file [serve.json]:
     path: {
       '/': './public',
     },
-    default: '/index.html'
+    default: './public/index.html'
   },
 
   api: "./api/index.js"

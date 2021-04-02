@@ -4,6 +4,6 @@
     "path": {
       "/": "./public"
     },
-    "default": "/index.html"
+    "default": "./public/index.html"
   }
 }
